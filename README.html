@@ -1,0 +1,66 @@
+<h1>Petri-Net simulated cell interactions</h1>
+<p>planned:
+bosst graph library (parallel?) for adjacency considerations to not go through ALL the transitions, but only those that after a transition can still fire.
+Will not always work, but should be good enough to speed up through transitions, without losing randomness</p>
+<h2>(basic modeling idea)</h2>
+<h3>class &quot;node&quot;</h3>
+<p>Simple PL42 example:</p>
+<pre><code class="language-python">p1 = {
+    label : 'Node 1',
+    type: 'NUMERIC'
+};
+
+p2 = {
+    label : 'Node 2',
+    type: 'NUMERIC'
+};
+
+t  = {
+    label : 'transition',
+    context = &quot;general&quot;:{
+        p2 : passForward(p1)
+    }
+};
+
+STATE {
+    p1: 2,
+    p2: 3
+};
+</code></pre>
+<h2>current v0 (naive data-centric implementation - no graphs and no adjacency, yet)</h2>
+<p>Type...</p>
+<pre><code>make
+</code></pre>
+<p>...to compile, then...</p>
+<pre><code>make run
+</code></pre>
+<p>to run the program with fixed number of nodes and transitions. Currently 10000 Nodes/transitions/starting tokens with 20k repetitions scans through all the transitions, checking whether they execute and execute if the do. It takes an Intel i5 5200U laptop CPU around 7,8s to finish - average of 5 runs.
+Program is single threaded. std::execute::unseq gives no guarantee and seems slightly detrimental to performance (-0.1s). ..::par - versions fail to compile so far.
+Distributing data across threads on shared memory system should be rather easy. Just hints to performance, no meaningful benchmark yet.</p>
+<p>Currently there are only 1:1 transitions, i.e. 1 token from a source node goes to 1 target node. And there are no hints after transitions that calculate changed ready transition. It just naively scans transitions from a list. But uses locks.</p>
+<h3>Data centric model instead of object oriented</h3>
+<p>store properties in contiguous dense vectors instead of vector of objects for better locality and cace reuse. Task will be very memory IO intensive as it is.</p>
+<h2>Planned Use with Frontend(?)</h2>
+<ul>
+<li>Frontend for instance in python and QT, or JS to output a JSON graph with all annotations and parameters.</li>
+<li>read JSON (JSON simd) with C++ program and do the heavy lifting</li>
+<li>output desired states to the user via some graph tool (likely graphviz -&gt; dot)</li>
+</ul>
+<h2>Caution</h2>
+<ul>
+<li>avoid central locking mechanism -&gt; performance<ul>
+<li>have existing transitions ready<ul>
+<li>have &quot;ready&quot; transitions ready (quicker scheduling)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>avoid transition cascades -&gt; bad simulation / lack of randomness</li>
+</ul>
+<h2>Open quetions</h2>
+<p>What kind of hardware is it going to be used on? Accelerators? Shared memory? distributed/OpenMPI? locally/remote?</p>
+<p>Will running out of memory become a problem? Overflow?</p>
+<p>Is it worth it to recompile before execution or make everything generic enough to compile once and deal with inputs?</p>
+<p>How sparse is the system? How many overlaps (lock interferences) will there be between threads? Deadlocks?</p>
+<p>Multiset or explicit?</p>
+<p>Explicit Preload?</p>
