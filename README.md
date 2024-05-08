@@ -111,3 +111,15 @@ Explicit Preload?
 - try_lock is probably not necessary due to scale factors (too few collision) - according to cpprefcom lock uses deadlock algorithm if repeated locking attempts fail. But apparently, it doesn't... lock guarantees execution. 
 - Hypothesis:  self loops cause deadlocks with lock guard CONFIRMED! buck deadlocks can still occur!
 - shared mutexes may provide benefits for some read only instances. it is however not possible to upgrade shared acces to an exclusive one anymore (booo!) -> non blocking seems best for now
+
+## Correctness Pitfalls
+- not random enough
+- Floats representing concentrations can grow and then shirink. Shrinking can lead to numeric problems. 34bit mantissa (roughly 1^9) may not be enough to model and hold vastly differing concentration levels when subtracting (addition, multiplication and division would not be a problem) in a long running and dynamic simulation.
+
+## Performance considerations
+### division into cells
+...and assigning a task/processor/ to it. 
+if the cell is small enough 1 is enough and only few nodes need to interact outside the cells, ie not needing synchronisation and locking.
+Outside would mean one level down the hierarchy. Only those cells need locking. Maybe a cell wide lock would be necessary.
+
+In some cases the Outside may be device or even network interaction.

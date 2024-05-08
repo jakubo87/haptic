@@ -14,5 +14,8 @@ echo:
 run:
 	./pn
 
+fuzz: fuzzy.cc
+	g++ -std=c++2b -march=native -Wall -O3 -flto fuzzy.cc -o foo
+
 clean:
 	rm -rf pn
