@@ -4,7 +4,7 @@ all: pn
 
 
 pn: main.cc
-	g++ -std=c++2b -march=native -Wall -O3 -flto main.cc -o pn
+	g++ -std=c++23 -march=native -Wall -O3 -flto main.cc -o pn
 
 .PHONY: echo run clean
 
@@ -15,7 +15,7 @@ run:
 	./pn
 
 fuzz: fuzzy.cc
-	g++ -std=c++2b -march=native -Wall -O3 -flto fuzzy.cc -o foo
+	g++ -std=c++23 -march=native -Wall -O3 -flto fuzzy.cc -o foo
 
 clean:
 	rm -rf pn
