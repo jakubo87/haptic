@@ -15,7 +15,7 @@
 
 #include "tags.hh"
 #include "places.hh" //places.hh before rules.hh
-#include "rules.hh"
+#include "transitions.hh"
 #include "threading.hh"
 
 

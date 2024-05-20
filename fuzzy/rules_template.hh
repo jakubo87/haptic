@@ -2,6 +2,9 @@
 #define RULES_HH 
 
 //RULES.hh
+// a generated file to be read from the frontend and translated to functions readable by c++ 
+// the output will be a vector of all  the places changes (i.e. all the fuzzy categories)
+
 #include <vector>
 #include <span>
 //include "fuzzy.hh"

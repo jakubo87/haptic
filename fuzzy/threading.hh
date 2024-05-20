@@ -6,8 +6,8 @@
 #include <thread>
 
 //more permanent distribution - for now attept with async/futures
-struct equal_distrib_tag{} edt;
-struct no_assign_tag{} nat;
+struct equal_distrib_tag{};
+struct no_assign_tag{};
 //struct other_distribution_tag{};
 
 #ifndef NTH
